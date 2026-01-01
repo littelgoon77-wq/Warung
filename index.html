@@ -3,223 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BumbuMart - 1000 Item Unik</title>
+    <title>BumbuMart - Katalog Lengkap & Varian</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --orange: #ee4d2d; --bg: #f4f4f4; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 140px; }
-        header { background: var(--orange); color: white; padding: 15px; position: sticky; top: 0; z-index: 1000; }
-        .header-content { max-width: 800px; margin: auto; }
-        .search-box { position: relative; margin-top: 10px; }
-        .search-box input { width: 100%; padding: 12px 15px 12px 40px; border-radius: 8px; border: none; outline: none; box-sizing: border-box; font-size: 16px; }
-        .search-box i { position: absolute; left: 15px; top: 13px; color: #888; }
-        .filter-bar { background: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; max-width: 800px; margin: auto; }
-        .sort-select { padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px; cursor: pointer; }
-        .categories { background: white; display: flex; overflow-x: auto; gap: 8px; padding: 12px; scrollbar-width: none; border-bottom: 1px solid #eee; max-width: 800px; margin: auto; }
-        .cat-item { padding: 8px 15px; border-radius: 20px; background: #eee; font-size: 11px; cursor: pointer; white-space: nowrap; font-weight: 600; }
-        .cat-item.active { background: #fff2f0; color: var(--orange); border: 1px solid var(--orange); }
-        .container { max-width: 800px; margin: auto; padding: 12px; }
-        .user-info { background: #fffbe6; padding: 15px; border-radius: 10px; border: 1px solid #ffe58f; margin-bottom: 15px; }
-        .user-info input { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-        .card { background: white; border-radius: 10px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; }
-        .visual { width: 100%; aspect-ratio: 1/1; background: #fafafa; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--orange); font-size: 24px; border: 1px solid #f0f0f0; }
-        .brand-name { font-size: 9px; font-weight: 800; color: var(--orange); text-transform: uppercase; }
-        .item-name { font-size: 12px; font-weight: 600; color: #333; height: 32px; overflow: hidden; margin: 4px 0; line-height: 1.2; }
-        .price { font-size: 15px; font-weight: 800; color: #000; margin-top: auto; }
-        .btn-add { background: var(--orange); color: white; border: none; width: 100%; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 11px; }
-        .checkout-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -3px 15px rgba(0,0,0,0.1); z-index: 1001; }
-        .bar-content { max-width: 800px; margin: auto; display: flex; justify-content: space-between; align-items: center; }
-        .btn-wa { background: #25d366; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; border:none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        :root { 
+            --primary: #00A6FB; 
+            --primary-dark: #0086CA; 
+            --accent-price: #FF4500; 
+            --accent-green: #00C853; 
+            --dark: #2C3E50; 
+            --gray-bg: #F0F4F8; 
+            --text-sub: #7F8C8D;
+            --icon-bg: #E1F5FE; 
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--gray-bg); 
+            margin: 0; 
+            padding-bottom: 140px; 
+            color: var(--dark);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        header { 
+            background: white; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 15px rgba(0,166,251,0.1); 
+            padding: 15px 0;
+            border-top: 4px solid var(--primary); 
+        }
+        .header-inner { max-width: 600px; margin: auto; padding: 0 15px; }
+        .app-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; color: var(--primary); letter-spacing: -0.5px; }
+        
+        .search-wrapper { position: relative; }
+        .search-wrapper input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+            color: var(--dark);
+        }
+        .search-wrapper input:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,166,251,0.1); }
+        .search-wrapper i { position: absolute; left: 15px; top: 12px; color: var(--primary); opacity: 0.7; }
+
+        .cat-scroll { 
+            display: flex; 
+            overflow-x: auto; 
+            gap: 10px; 
+            padding: 15px; 
+            background: white; 
+            scrollbar-width: none; 
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 80px;
+            z-index: 999;
+        }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-chip { 
+            padding: 8px 18px; 
+            border-radius: 25px; 
+            background: white; 
+            border: 1px solid #E2E8F0;
+            color: var(--text-sub); 
+            font-size: 12px; 
+            font-weight: 700; 
+            white-space: nowrap; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cat-chip.active { 
+            background: var(--primary); 
+            color: white; 
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,166,251,0.3); 
+        }
+
+        .container { max-width: 600px; margin: auto; padding: 15px; }
+        
+        .user-section { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            border: 1px solid #E2E8F0;
+        }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { font-size: 11px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: #F8FAFC; }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+        }
+
+        .card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            border: 1px solid #F0F4F8;
+            position: relative;
+            transition: 0.2s;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,166,251,0.1); border-color: var(--primary); }
+
+        .card-icon { 
+            width: 40px; 
+            height: 40px; 
+            background: var(--icon-bg); 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--primary); 
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .card-brand { font-size: 10px; color: var(--text-sub); font-weight: 800; text-transform: uppercase; }
+        .card-name { 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: var(--dark); 
+            margin: 4px 0 8px; 
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 36px; 
+        }
+        .card-price { font-size: 15px; font-weight: 900; color: var(--accent-price); margin-top: auto; } 
+        
+        .btn-add { 
+            margin-top: 10px; 
+            background: white; 
+            color: var(--primary); 
+            border: 1px solid var(--primary); 
+            padding: 8px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-add:hover { background: var(--primary); color: white; }
+        
+        .card-badge {
+            position: absolute; top: -5px; right: -5px;
+            background: var(--accent-price); color: white; 
+            font-size: 10px; padding: 3px 8px; border-radius: 10px;
+            font-weight: bold; display: none;
+            box-shadow: 0 2px 5px rgba(255,69,0,0.3);
+        }
+
+        .bottom-bar { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: white; 
+            padding: 15px 20px; 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); 
+            z-index: 1000;
+        }
+        .bar-content { 
+            max-width: 600px; margin: auto; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .btn-checkout { 
+            background: linear-gradient(135deg, var(--accent-green), #00E676); 
+            color: white; border: none; 
+            padding: 12px 24px; border-radius: 30px; 
+            font-weight: 700; font-size: 14px; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(44, 62, 80, 0.7); 
+            z-index: 2000; display: none; backdrop-filter: blur(4px);
+        }
+        .modal-box { 
+            background: white; width: 100%; max-width: 600px; 
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box;
+            max-height: 85vh; overflow-y: auto;
+        }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #E2E8F0; }
+        .qty-group { display: flex; align-items: center; gap: 8px; background: #F8FAFC; padding: 5px; border-radius: 10px; }
+        .btn-mini { width: 28px; height: 28px; background: white; border: 1px solid #E2E8F0; border-radius: 6px; cursor: pointer; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-content">
-        <b>BumbuMart - 1000 Produk Unik</b>
-        <div class="search-box">
+    <div class="header-inner">
+        <div class="app-title">BumbuMart</div>
+        <div class="search-wrapper">
             <i class="fa fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Cari sachet, ml, gr, dus..." onkeyup="processFilter()">
+            <input type="text" id="searchInput" placeholder="Cari barang atau ukuran..." onkeyup="filterProducts()">
         </div>
     </div>
 </header>
 
-<div class="filter-bar">
-    <div style="font-size: 11px; color: #666;">LIST: <span id="resultCount">0</span> ITEM</div>
-    <select class="sort-select" id="sortPrice" onchange="processFilter()">
-        <option value="default">Relevansi</option>
-        <option value="low">Termurah</option>
-        <option value="high">Termahal</option>
-    </select>
-</div>
-
-<div class="categories" id="catList"></div>
+<div class="cat-scroll" id="catList"></div>
 
 <div class="container">
-    <div class="user-info">
-        <input type="text" id="custName" placeholder="Nama Anda">
-        <input type="text" id="custAddr" placeholder="Alamat Kirim">
+    <div class="user-section">
+        <div class="input-group">
+            <label>Nama Pemesan</label>
+            <input type="text" id="cName" placeholder="Nama Anda">
+        </div>
+        <div class="input-group">
+            <label>Alamat Kirim</label>
+            <input type="text" id="cAddr" placeholder="Alamat Lengkap">
+        </div>
     </div>
+
+    <div style="margin-bottom: 15px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between;">
+        <span id="itemCountLabel">Memuat produk...</span>
+        <select id="sortSelect" onchange="filterProducts()" style="border:none; background:transparent; color:var(--primary); font-weight:bold;">
+            <option value="def">Acak</option>
+            <option value="low">Termurah</option>
+            <option value="high">Termahal</option>
+        </select>
+    </div>
+
     <div class="grid" id="productGrid"></div>
 </div>
 
-<div class="checkout-bar" id="checkoutBar" style="display: none;">
-    <div class="bar-content">
-        <div>
-            <div id="itemCount" style="font-size: 11px; color: #777;">0 Item</div>
-            <div id="priceTotal" style="font-size: 18px; font-weight: 800; color: var(--orange);">Rp 0</div>
+<div class="modal-overlay" id="cartModal">
+    <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="margin:0; color:var(--primary);">Rincian Pesanan</h3>
+            <span onclick="toggleCart()" style="cursor:pointer; font-size:20px;">✕</span>
         </div>
-        <button class="btn-wa" onclick="checkoutWA()">
-            <i class="fab fa-whatsapp"></i> Pesan via WA
+        <div id="cartListContent"></div>
+        <div style="margin-top:25px; padding-top:20px; border-top:2px dashed #F0F4F8;">
+            <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:bold; margin-bottom:20px;">
+                <span>Total</span>
+                <span id="modalTotal" style="color:var(--accent-price);">Rp 0</span>
+            </div>
+            <button class="btn-checkout" style="width:100%; justify-content:center;" onclick="toggleCart()">
+                Tambah Barang Lagi
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-bar" id="bottomBar" style="display: none;">
+    <div class="bar-content">
+        <div onclick="toggleCart()" style="cursor: pointer;">
+            <div style="font-size: 11px; color: var(--text-sub);">Total:</div>
+            <div id="barTotal" style="font-size: 18px; font-weight: 900; color: var(--accent-price);">Rp 0</div>
+        </div>
+        <button class="btn-checkout" onclick="sendWA()">
+            <i class="fab fa-whatsapp"></i> Pesan Sekarang
         </button>
     </div>
 </div>
 
 <script>
-    // Struktur Data Matrix untuk 1000 Kombinasi Unik Tanpa Duplikat
-    const masterData = [
-        { cat: "Minyak", icon: "fa-droplet", brands: [
-            { b: "Bimoli", variants: ["Klasik Pouch", "Spesial Pouch", "Jerigen"], sizes: ["1L", "2L", "5L"], prices: [20500, 40000, 110000] },
-            { b: "Sania", variants: ["Premium Pouch", "Refill"], sizes: ["1L", "2L"], prices: [19800, 39500] },
-            { b: "Fortune", variants: ["Pouch Higienis"], sizes: ["1L", "2L"], prices: [19500, 38500] },
-            { b: "Filma", variants: ["Pouch"], sizes: ["1L", "2L"], prices: [20000, 39800] }
-        ]},
-        { cat: "Kecap", icon: "fa-bottle-droplet", brands: [
-            { b: "Bango", variants: ["Manis Pouch", "Manis Botol", "Manis Sachet"], sizes: ["520ml", "210ml", "135ml", "18ml"], prices: [26500, 11500, 10000, 1000] },
-            { b: "ABC", variants: ["Manis Pouch", "Asin Botol", "Inggris Botol"], sizes: ["520ml", "225ml", "133ml", "195ml"], prices: [25000, 11000, 9500, 15000] },
-            { b: "Sedaap", variants: ["Manis Pouch", "Manis Sachet"], sizes: ["550ml", "225ml", "20ml"], prices: [24000, 10500, 1000] }
-        ]},
-        { cat: "Mie", icon: "fa-bowl-rice", brands: [
-            { b: "Indomie", variants: ["Goreng Spesial", "Soto Mie", "Ayam Bawang", "Kari Ayam", "Sambal Matah", "Aceh"], sizes: ["Satuan", "Isi 5", "Dus 40pcs"], prices: [3500, 17000, 128000] },
-            { b: "Sedaap", variants: ["Goreng", "Soto", "Ayam Bawang", "Korean Spicy", "Singapore Laksa"], sizes: ["Satuan", "Isi 5", "Dus 40pcs"], prices: [3400, 16500, 122000] },
-            { b: "Sarimi", variants: ["Goreng Ayam Kremes", "Soto Koya"], sizes: ["Isi 2", "Satuan"], prices: [5000, 3000] }
-        ]},
-        { cat: "Penyedap", icon: "fa-box", brands: [
-            { b: "Royco", variants: ["Rasa Ayam", "Rasa Sapi", "Jamur"], sizes: ["Sachet 8g", "Renceng", "Pouch 230g"], prices: [500, 5000, 14000] },
-            { b: "Masako", variants: ["Rasa Ayam", "Rasa Sapi"], sizes: ["Sachet 9g", "Renceng", "Pouch 250g"], prices: [500, 5000, 14500] },
-            { b: "Ajinomoto", variants: ["MSG Murni", "Kertas"], sizes: ["50g", "100g", "250g", "500g"], prices: [3000, 6000, 14500, 28000] },
-            { b: "Sasa", variants: ["MSG", "Tepung Bakwan", "Tepung Pisang"], sizes: ["100g", "250g", "Sachet"], prices: [6000, 14000, 2500] }
-        ]},
-        { cat: "Sembako", icon: "fa-cubes", brands: [
-            { b: "Gulaku", variants: ["Kuning", "Putih"], sizes: ["1kg", "500g", "Pouch 750g"], prices: [18500, 9500, 15000] },
-            { b: "Rose Brand", variants: ["Tepung Beras", "Tepung Ketan", "Gula Pasir"], sizes: ["500g", "1kg"], prices: [8500, 18000] },
-            { b: "Segitiga Biru", variants: ["Tepung Terigu"], sizes: ["1kg", "500g"], prices: [14500, 7500] }
-        ]},
-        { cat: "Minuman", icon: "fa-mug-hot", brands: [
-            { b: "Kapal Api", variants: ["Mix", "Spesial", "Mantap"], sizes: ["Renceng", "Sachet", "165g"], prices: [15000, 1500, 18000] },
-            { b: "Luwak", variants: ["White Koffie"], sizes: ["Renceng", "Isi 5", "Isi 20"], prices: [14500, 8000, 27000] },
-            { b: "Frisian Flag", variants: ["Cokelat", "Putih"], sizes: ["Sachet", "Kaleng", "Pouch"], prices: [2500, 12500, 18000] }
-        ]}
+    // --- DATABASE MASTER DENGAN TAMBAHAN SEMUA PRODUK SEBELUMNYA ---
+    const catalogMatrix = [
+        {
+            cat: "Eceran Seribuan", icon: "fa-tag",
+            brands: ["Masako", "Royco", "Ladaku", "Sasa", "Indocafe", "Torabika", "Marimas", "Nutrisari", "Mama Lemon", "So Klin"],
+            items: [
+                {n: "Penyedap Rasa Sachet", p: 500},
+                {n: "Merica Bubuk Sachet kecil", p: 1000},
+                {n: "MSG Micin Kecil", p: 500},
+                {n: "Kopi Coffeemix 1 Sachet", p: 1500},
+                {n: "Kopi Susu 1 Sachet", p: 2000},
+                {n: "Minuman Bubuk Rasa", p: 500},
+                {n: "Minuman Vitamin C Sachet", p: 1500},
+                {n: "Sabun Cuci Piring Kecil", p: 1000},
+                {n: "Deterjen Cair Sachet", p: 1000},
+                {n: "Pewangi Pakaian Sachet", p: 500}
+            ]
+        },
+        {
+            cat: "Dapur & Sembako", icon: "fa-droplet",
+            brands: ["Bimoli", "Sania", "Fortune", "Tropical", "Filma"],
+            items: [
+                {n: "Minyak Goreng Pouch 1 Liter", p: 19500},
+                {n: "Minyak Goreng Pouch 2 Liter", p: 38000},
+                {n: "Minyak Goreng Gelas 220ml", p: 5000},
+                {n: "Minyak Botol 1 Liter", p: 21000},
+                {n: "Beras Sentra Ramos 5kg", p: 75000}
+            ]
+        },
+        {
+            cat: "Mie Instan", icon: "fa-bowl-food",
+            brands: ["Indomie", "Mie Sedaap", "Sarimi"],
+            items: [
+                {n: "Goreng Spesial", p: 3500},
+                {n: "Goreng Rendang", p: 3500},
+                {n: "Goreng Sambal Matah", p: 3500},
+                {n: "Rasa Soto Mie", p: 3200},
+                {n: "Rasa Kari Ayam", p: 3400},
+                {n: "Sarimi Isi 2 Ayam Kecap", p: 4500},
+                {n: "1 Dus Goreng (Isi 40)", p: 136000},
+                {n: "1 Dus Soto (Isi 40)", p: 124000}
+            ]
+        },
+        {
+            cat: "Dapur & Sembako", icon: "fa-bowl-rice",
+            brands: ["Gulaku", "Rose Brand"],
+            items: [
+                {n: "Gula Pasir Premium 1kg", p: 18500},
+                {n: "Gula Pasir Kuning 1kg", p: 17500},
+                {n: "Tepung Terigu 1kg", p: 14000}
+            ]
+        },
+        {
+            cat: "Susu & Bayi", icon: "fa-baby-carriage",
+            brands: ["MamyPoko", "Sweety", "SGM", "Dancow", "Ultra Milk", "My Baby"],
+            items: [
+                {n: "Popok Celana Size M (20s)", p: 45000},
+                {n: "Popok Celana Size L (18s)", p: 45000},
+                {n: "Susu Eksplor 1+ 400gr", p: 42000},
+                {n: "Susu Bubuk 400gr (Box)", p: 55000},
+                {n: "Susu UHT 200ml", p: 5500},
+                {n: "Minyak Telon 60ml", p: 18000},
+                {n: "Tisu Basah (50s)", p: 15000}
+            ]
+        },
+        {
+            cat: "Tisu & Pembalut", icon: "fa-box-tissue",
+            brands: ["Nice", "Paseo", "Laurier", "Charm"],
+            items: [
+                {n: "Tisu Wajah 250s", p: 14500},
+                {n: "Tisu Travel 50s", p: 5000},
+                {n: "Pembalut Night 35cm", p: 18000},
+                {n: "Pembalut Wing 24cm", p: 22000}
+            ]
+        },
+        {
+            cat: "Bumbu & Masak", icon: "fa-bottle-droplet",
+            brands: ["Bango", "ABC", "Sedaap"],
+            items: [
+                {n: "Kecap Manis Botol 135ml", p: 10000},
+                {n: "Kecap Manis Pouch 520ml", p: 25500},
+                {n: "Saus Sambal Botol 335ml", p: 16500}
+            ]
+        },
+        {
+            cat: "Kebutuhan Rumah", icon: "fa-house-chimney-window",
+            brands: ["Molto", "Downy", "Super Pell", "Baygon", "Vixal"],
+            items: [
+                {n: "Pewangi Pouch 700ml", p: 22000},
+                {n: "Pembersih Lantai 700ml", p: 15500},
+                {n: "Obat Nyamuk Semprot 600ml", p: 39500},
+                {n: "Vixal Pembersih WC 500ml", p: 17000}
+            ]
+        },
+        {
+            cat: "Obat & P3K", icon: "fa-medkit",
+            brands: ["Panadol", "Promag", "Hansaplast", "Cap Lang"],
+            items: [
+                {n: "Paracetamol (Strip)", p: 12000},
+                {n: "Obat Maag (Strip)", p: 9000},
+                {n: "Minyak Kayu Putih 60ml", p: 22000},
+                {n: "Plester Luka (10s)", p: 7000}
+            ]
+        },
+        {
+            cat: "Mandi & Rambut", icon: "fa-soap",
+            brands: ["Lifebuoy", "Nuvo", "Sunsilk", "Pepsodent", "Clear"],
+            items: [
+                {n: "Sabun Batang 70gr", p: 4500},
+                {n: "Sabun Cair Pouch 450ml", p: 26000},
+                {n: "Pasta Gigi White 190gr", p: 18500},
+                {n: "Shampoo Sachet (Renceng)", p: 11500}
+            ]
+        },
+        {
+            cat: "Cuci & Bersih", icon: "fa-shirt",
+            brands: ["Rinso", "So Klin", "Sunlight", "Mama Lemon"],
+            items: [
+                {n: "Deterjen Bubuk 770gr", p: 22000},
+                {n: "Deterjen Sachet (Renceng)", p: 10000},
+                {n: "Cuci Piring Pouch 755ml", p: 16500}
+            ]
+        },
+        {
+            cat: "Minuman & Snack", icon: "fa-mug-hot",
+            brands: ["Kapal Api", "Milo", "Energen", "Roma", "Beng-Beng"],
+            items: [
+                {n: "Kopi Mix (Renceng)", p: 15000},
+                {n: "Milo Sachet (Renceng)", p: 22000},
+                {n: "Energen Sereal (Renceng)", p: 21000},
+                {n: "Biskuit Kelapa 300gr", p: 10500},
+                {n: "Beng-Beng (Pack 10s)", p: 24000}
+            ]
+        }
     ];
 
     let allProducts = [];
     let cart = {};
     let activeCat = "Semua";
 
-    function generate1000Unique() {
-        let count = 0;
-        // Loop hingga mencapai 1000 item unik
-        while (count < 1000) {
-            masterData.forEach(catGroup => {
-                catGroup.brands.forEach(brandGroup => {
-                    brandGroup.variants.forEach(variant => {
-                        brandGroup.sizes.forEach((size, idx) => {
-                            if (count < 1000) {
-                                // Menciptakan Nama Unik: Merek + Varian + Ukuran
-                                let uniqueName = `${brandGroup.b} ${variant} ${size}`;
-                                // Mencegah nama yang sama masuk dua kali
-                                if (!allProducts.some(p => p.name === uniqueName)) {
-                                    allProducts.push({
-                                        id: count,
-                                        brand: brandGroup.b,
-                                        name: uniqueName,
-                                        price: brandGroup.prices[idx] || (brandGroup.prices[0] + (count % 10 * 100)),
-                                        cat: catGroup.cat,
-                                        icon: catGroup.icon
-                                    });
-                                    count++;
-                                }
-                            }
-                        });
+    function init() {
+        let idCounter = 1;
+        catalogMatrix.forEach(grp => {
+            grp.brands.forEach(br => {
+                grp.items.forEach(it => {
+                    allProducts.push({
+                        id: idCounter++,
+                        name: `${br} ${it.n}`,
+                        price: it.p,
+                        cat: grp.cat,
+                        icon: grp.icon,
+                        brand: br
                     });
                 });
             });
-            // Jika matrix masih kurang dari 1000, tambahkan variasi "Karton/Grosir"
-            if (count < 1000) {
-                let random = allProducts[Math.floor(Math.random() * allProducts.length)];
-                let wholesaleName = random.name + " (Karton)";
-                if (!allProducts.some(p => p.name === wholesaleName)) {
-                    allProducts.push({ ...random, name: wholesaleName, price: random.price * 10, cat: "Grosir", icon: "fa-boxes-packing" });
-                    count++;
-                }
-            }
-        }
+        });
+        renderCategories();
+        filterProducts();
     }
 
-    function init() {
-        generate1000Unique();
+    function renderCategories() {
         const cats = ["Semua", ...new Set(allProducts.map(p => p.cat))];
         document.getElementById('catList').innerHTML = cats.map(c => 
-            `<div class="cat-item ${c==='Semua'?'active':''}" onclick="filterCat('${c}', this)">${c}</div>`
+            `<div class="cat-chip ${c==='Semua'?'active':''}" onclick="setCat('${c}', this)">${c}</div>`
         ).join('');
-        processFilter();
     }
 
-    function filterCat(c, el) {
-        document.querySelectorAll('.cat-item').forEach(x => x.classList.remove('active'));
-        el.classList.add('active');
+    function setCat(c, el) {
         activeCat = c;
-        processFilter();
+        document.querySelectorAll('.cat-chip').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        filterProducts();
     }
 
-    function processFilter() {
-        let q = document.getElementById('searchInput').value.toLowerCase();
-        let s = document.getElementById('sortPrice').value;
-        let filtered = allProducts.filter(p => (activeCat === "Semua" || p.cat === activeCat) && p.name.toLowerCase().includes(q));
-        if(s === "low") filtered.sort((a,b) => a.price - b.price);
-        if(s === "high") filtered.sort((a,b) => b.price - a.price);
-        document.getElementById('resultCount').innerText = filtered.length;
-        render(filtered.slice(0, 80));
+    function filterProducts() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const sort = document.getElementById('sortSelect').value;
+        let filtered = allProducts.filter(p => 
+            (activeCat === "Semua" || p.cat === activeCat) && p.name.toLowerCase().includes(q)
+        );
+        if (sort === 'low') filtered.sort((a,b) => a.price - b.price);
+        if (sort === 'high') filtered.sort((a,b) => b.price - a.price);
+
+        document.getElementById('itemCountLabel').innerText = `${filtered.length} Produk`;
+        renderGrid(filtered);
     }
 
-    function render(items) {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = items.map(p => `
+    function renderGrid(items) {
+        document.getElementById('productGrid').innerHTML = items.map(p => {
+            const qty = cart[p.name] ? cart[p.name].qty : 0;
+            return `
             <div class="card">
-                <div class="visual"><i class="fa ${p.icon}"></i></div>
-                <div class="brand-name">${p.brand}</div>
-                <div class="item-name">${p.name}</div>
-                <div class="price">Rp ${p.price.toLocaleString()}</div>
-                <button class="btn-add" onclick="add('${p.name}', ${p.price})">TAMBAH</button>
+                <div class="card-badge" id="badge-${p.id}" style="display:${qty > 0 ? 'block' : 'none'}">${qty}</div>
+                <div class="card-icon"><i class="fa ${p.icon}"></i></div>
+                <div class="card-brand">${p.brand}</div>
+                <div class="card-name">${p.name.replace(p.brand, '').trim()}</div>
+                <div class="card-price">Rp ${p.price.toLocaleString()}</div>
+                <button class="btn-add" onclick="addItem('${p.name}', ${p.price}, ${p.id})">
+                    ${qty > 0 ? 'Tambah (+1)' : 'Beli'}
+                </button>
             </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    function add(n, p) {
-        if(cart[n]) cart[n].q++; else cart[n] = { p: p, q: 1 };
-        update();
+    function addItem(name, price, id) {
+        if (!cart[name]) cart[name] = { price: price, qty: 0, id: id };
+        cart[name].qty++;
+        updateUI();
     }
 
-    function update() {
-        let t = 0, c = 0;
-        for(let k in cart) { t += (cart[k].p * cart[k].q); c += cart[k].q; }
-        document.getElementById('priceTotal').innerText = "Rp " + t.toLocaleString();
-        document.getElementById('itemCount').innerText = c + " Produk Terpilih";
-        document.getElementById('checkoutBar').style.display = c > 0 ? 'block' : 'none';
+    function reduceItem(name) {
+        if (cart[name]) {
+            cart[name].qty--;
+            if (cart[name].qty <= 0) delete cart[name];
+        }
+        updateUI();
     }
 
-    function checkoutWA() {
-        const n = document.getElementById('custName').value || "Pelanggan";
-        const a = document.getElementById('custAddr').value || "Alamat tidak diisi";
-        let txt = `*NOTA BUMBUMART*%0A*Nama:* ${n}%0A*Alamat:* ${a}%0A%0A`;
-        for(let k in cart) txt += `• ${k} (${cart[k].q}x)%0A`;
-        txt += `%0A*TOTAL TAGIHAN: ${document.getElementById('priceTotal').innerText}*`;
-        window.open(`https://wa.me/6282280831280?text=${txt}`);
+    function deleteItem(name) {
+        delete cart[name];
+        updateUI();
+    }
+
+    function updateUI() {
+        let total = 0;
+        let html = '';
+        let hasItems = false;
+
+        document.querySelectorAll('.card-badge').forEach(el => el.style.display = 'none');
+
+        for (let key in cart) {
+            hasItems = true;
+            let item = cart[key];
+            total += (item.price * item.qty);
+            
+            const badge = document.getElementById(`badge-${item.id}`);
+            if(badge) {
+                badge.innerText = item.qty;
+                badge.style.display = 'block';
+            }
+
+            html += `
+                <div class="cart-item">
+                    <div style="flex:1;">
+                        <div style="font-size:13px; font-weight:700;">${key}</div>
+                        <div style="font-size:12px; color:var(--text-sub);">@Rp ${item.price.toLocaleString()}</div>
+                    </div>
+                    <div class="qty-group">
+                        <button class="btn-mini" onclick="reduceItem('${key}')">-</button>
+                        <span style="font-size:13px; font-weight:bold; min-width:20px; text-align:center;">${item.qty}</span>
+                        <button class="btn-mini" onclick="addItem('${key}', ${item.price}, ${item.id})">+</button>
+                    </div>
+                    <i class="fa fa-trash-alt" style="color:#ff4d4f; margin-left:10px; cursor:pointer;" onclick="deleteItem('${key}')"></i>
+                </div>
+            `;
+        }
+
+        document.getElementById('cartListContent').innerHTML = html || '<p style="text-align:center;color:#aaa;">Keranjang kosong.</p>';
+        document.getElementById('barTotal').innerText = "Rp " + total.toLocaleString();
+        document.getElementById('modalTotal').innerText = "Rp " + total.toLocaleString();
+        document.getElementById('bottomBar').style.display = hasItems ? 'block' : 'none';
+        if (!hasItems) document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function toggleCart() {
+        const m = document.getElementById('cartModal');
+        m.style.display = (m.style.display === 'none' || m.style.display === '') ? 'block' : 'none';
+    }
+
+    function sendWA() {
+        const name = document.getElementById('cName').value.trim();
+        const addr = document.getElementById('cAddr').value.trim();
+        if (!name || !addr) return alert("Mohon lengkapi Nama dan Alamat!");
+
+        let msg = `*ORDER BUMBUMART*%0A%0A👤: ${name}%0A📍: ${addr}%0A%0A`;
+        let total = 0;
+        for (let k in cart) {
+            let sub = cart[k].price * cart[k].qty;
+            total += sub;
+            msg += `• ${cart[k].qty}x ${k} = Rp ${sub.toLocaleString()}%0A`;
+        }
+        msg += `%0A*TOTAL: Rp ${total.toLocaleString()}*`;
+        window.open(`https://wa.me/6282280831280?text=${msg}`);
     }
 
     init();
 </script>
 </body>
 </html>
+
